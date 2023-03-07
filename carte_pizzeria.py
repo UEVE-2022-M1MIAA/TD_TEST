@@ -7,8 +7,6 @@ from typing import List
 class CartePizzeriaException(Exception):
     """Exception dedicated to CartePizzeria."""
 
-    pass
-
 
 class CartePizzeria:
     """Class CartePizzeria"""
@@ -18,9 +16,11 @@ class CartePizzeria:
         self.pizzas: List["Pizza"] = []
 
     def is_empty(self):
+        """Returns True if there are no pizzas, False otherwise"""
         return len(self.pizzas) == 0
 
     def nb_pizzas(self):
+        """Returns the number of pizzas"""
         return len(self.pizzas)
 
     def add_pizza(self, pizza: "Pizza"):
@@ -31,5 +31,5 @@ class CartePizzeria:
         """Remove a pizza"""
         try:
             self.pizzas.remove(pizza)
-        except ValueError:
-            raise CartePizzeriaException(f"{pizza} was not found.")
+        except ValueError as exc:
+            raise CartePizzeriaException(f"{pizza} was not found.") from exc
