@@ -1,0 +1,38 @@
+La mise en place de la CI doit être réalisée à la base de votre projet.
+En plus de ce qui est demandé dans le TD, j'ai ajouté un workflow pour évaluer la qualité de votre code via un linter (cf .github/workflows/pylint.py)
+
+Pour cela vous pouvez suivre les instructions : https://docs.github.com/fr/actions/using-workflows/using-starter-workflows
+
+Cela va consister à créer (à la base de votre projet) :
+- le répertoire .github
+- le répertoire .github/workflows
+- le fichier .github/workflows/pytest_coverage.yml
+
+
+Dans le fichier créé, vous allez ensuite définir votre workflow avec le contenu suivant:
+
+
+name: PytestCoverage
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov mock
+    - name: Run coverage with pytest and coverage plugin
+      run: |
+        pytest --cov=. --cov-fail-under=80 -v
+
